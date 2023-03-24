@@ -3,7 +3,22 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import User from '../Model/User';
 import Products from '../Model/Product';
+import { AuthRequest } from '../middlewave/auth';
+
 class AuthController {
+  async home(req: AuthRequest, res: Response) {
+    try {
+      const user = await User.findById(req.userId).select('-password');
+      if (!user) return res.status(400).json({ success: false, message: 'User not found' });
+      res.json({ success: true, user });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+      });
+    }
+  }
+
   async register(req: Request, res: Response) {
     try {
       const { username, password } = req.body;
@@ -45,7 +60,7 @@ class AuthController {
   async login(req: Request, res: Response) {
     try {
       const { username, password } = req.body;
-
+      console.log(username);
       // Check if user with email exists
 
       const user = await User.findOne({ username });
@@ -67,10 +82,10 @@ class AuthController {
         expiresIn: '1h',
       });
 
-      res.status(200).json({ success: true, message: 'đăng nhập thành công!', token });
+      return res.status(200).json({ success: true, message: 'đăng nhập thành công!', token });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: 'Server error', error });
+      return res.status(500).json({ message: 'Server error', error });
     }
   }
 }
