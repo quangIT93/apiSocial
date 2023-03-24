@@ -1,0 +1,14 @@
+GET http://localhost:3000/api/auth/register
+Content-Type: application/json
+Authorization: token xxx
+
+
+###
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+
+{
+    "username": "quang123",
+    "password": "123"
+}
