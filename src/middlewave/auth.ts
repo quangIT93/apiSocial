@@ -16,7 +16,7 @@ const verifyToken = (req: AuthRequest, res: Response, next: NextFunction) => {
 
   try {
     // const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
-    const secret = process.env.ACCESS_TOKEN_SECRET;
+    const secret = process.env.JWT_SECRET;
     if (!secret) {
       return res
         .status(500)

@@ -1,9 +1,14 @@
+###
+GET http://localhost:3000/api/auth/
+Content-Type: application/json
+Authorization: Beared eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ZkZDgzNWYzNWFmNTQ1MDExYzE0NTQiLCJpYXQiOjE2Nzk3NzI2Mjh9.CBwt6JLH4ZrudM2oIJe-Bg1Z_132XtgKKfA_D6SsY_g
+###
 GET http://localhost:3000/api/auth/register
 Content-Type: application/json
 Authorization: token xxx
 
 
-###
+### 
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
