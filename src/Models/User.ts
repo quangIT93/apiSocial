@@ -13,7 +13,7 @@ export type UserModel = mongoose.Document & {
   location?: {
     country?: string;
     city?: string;
-      district?:  String ,
+    district?: String;
   };
   dateOfBirth?: Date;
   createdAt: Date;
@@ -43,4 +43,4 @@ const userSchema = new mongoose.Schema<UserModel>(
   { timestamps: true }
 );
 
-export default mongoose.model<UserModel>('User', userSchema);
+export default mongoose.model<UserModel>('users', userSchema);

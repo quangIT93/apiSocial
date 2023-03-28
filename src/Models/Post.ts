@@ -1,18 +1,18 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
 interface IComment {
-  userId: string;
+  userId: Schema.Types.ObjectId;
   text: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
 interface ILike {
-  userId: string;
+  userId: Schema.Types.ObjectId;
 }
 
 interface IPost {
-  userId: string;
+  userId: Schema.Types.ObjectId;
   text: string;
   image?: string;
   createdAt: Date;
@@ -23,7 +23,8 @@ interface IPost {
 
 const PostSchema = new mongoose.Schema<IPost>({
   userId: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'users',
     required: true,
   },
   text: {

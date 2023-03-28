@@ -1,0 +1,30 @@
+GET http://localhost:3000/api/post/getAllPostFriend
+Content-Type: application/json
+Authorization: Beared eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ZkZGJhMGYzNWFmNTQ1MDExYzE0NjUiLCJpYXQiOjE2Nzk4NjE5NzF9.WGnBm0wzAKLpIa2QT2j6tCfreb7N2sHVcK99rDl1UAU
+
+###
+GET http://localhost:3000/api/post/getAllPostUser
+Content-Type: application/json
+Authorization: Beared eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ZkZGJhMGYzNWFmNTQ1MDExYzE0NjUiLCJpYXQiOjE2Nzk4NjE5NzF9.WGnBm0wzAKLpIa2QT2j6tCfreb7N2sHVcK99rDl1UAU
+
+### 
+POST http://localhost:3000/api/post/createPost
+Content-Type: application/json
+Authorization: Beared eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ZkZGJhMGYzNWFmNTQ1MDExYzE0NjUiLCJpYXQiOjE2Nzk4NjE5NzF9.WGnBm0wzAKLpIa2QT2j6tCfreb7N2sHVcK99rDl1UAU
+
+{
+    "userId": "63fddba0f35af545011c1465",
+  "text": "Nội dung bài post",
+  "image": "Đường dẫn đến ảnh (nếu có)",
+  "likes": [], 
+  "comments": [] 
+}
+
+### 
+POST http://localhost:3000/api/post/deletePost
+Content-Type: application/json
+Authorization: Beared eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ZkZGJhMGYzNWFmNTQ1MDExYzE0NjUiLCJpYXQiOjE2Nzk4NjE5NzF9.WGnBm0wzAKLpIa2QT2j6tCfreb7N2sHVcK99rDl1UAU
+
+{
+    "postId": "63fe04c44c676f47aa224f03"
+}

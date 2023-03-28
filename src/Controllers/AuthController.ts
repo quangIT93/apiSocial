@@ -91,8 +91,8 @@ class AuthController {
         mesage: 'get homepage successfully',
         // user,
         // posts1,
-        posts2,
-        // friends,
+        // posts2,
+        friends,
         // likes,
       });
     } catch (error) {
