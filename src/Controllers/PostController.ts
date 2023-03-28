@@ -73,6 +73,88 @@ class PostController {
     }
   }
 
+  async getAllPostUserAndFriend(req: AuthRequest, res: Response) {
+    try {
+      const result = await Post.aggregate([
+        {
+          $lookup: {
+            from: 'friends',
+            let: { userId: '$userId' },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ['$userId', new ObjectId(req.userId)] },
+                      { $eq: ['$status', 'accepted'] },
+                    ],
+                  },
+                },
+              },
+              {
+                $project: { friendId: 1, userId: 1 },
+              },
+            ],
+            as: 'friends',
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            let: { userId: '$userId', friendIds: '$friends.friendId', userIds: '$friends.userId' },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $or: [
+                      { $eq: ['$_id', '$$userId'] }, // Lấy thông tin user đăng bài
+                      { $in: ['$_id', '$$friendIds'] }, // Lấy thông tin friends
+                    ],
+                  },
+                },
+              },
+            ],
+            as: 'users',
+          },
+        },
+        {
+          $match: {
+            $expr: {
+              $or: [
+                { $eq: ['$userId', new ObjectId(req.userId)] }, // Lấy thông tin user đăng bài
+                { $in: ['$userId', '$friends.userId'] }, // Lấy thông tin friends
+              ],
+            },
+          },
+        },
+
+        {
+          $project: {
+            _id: 1,
+            userId: 1,
+            text: 1,
+            image: 1,
+            likes: 1,
+            comments: 1,
+            createdAt: 1,
+            updatedAt: 1,
+          },
+        },
+      ]);
+
+      if (result)
+        return res
+          .status(200)
+          .json({ success: true, message: 'get successfully all posts users and friends', result });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+      });
+    }
+  }
+
   async createPost(req: Request, res: Response) {
     try {
       const { text, image, likes, comments, userId } = req.body;

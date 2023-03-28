@@ -21,7 +21,7 @@ class LikeController {
     }
   }
 
-  async DeleteLikeForPostId(req: Request, res: Response) {
+  async deleteLikeForPostId(req: Request, res: Response) {
     try {
     } catch (error) {
       return res.status(500).json({

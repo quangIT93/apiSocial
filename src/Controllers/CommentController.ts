@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 
+import Comment from '../Models/Comment';
 class CommentController {
   async getCommentPost(req: Request, res: Response) {
     try {
+      const result = await Comment.find({});
     } catch (error) {
       return res.status(500).json({
         success: false,

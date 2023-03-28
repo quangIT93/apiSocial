@@ -5,6 +5,7 @@ const router = Router();
 
 router.get('/getAllPostFriend', verifyToken, postController.getAllPostFriend);
 router.get('/getAllPostUser', verifyToken, postController.getAllPostUser);
+router.get('/getAllPostUserAndFriend', verifyToken, postController.getAllPostUserAndFriend);
 router.post('/createPost', verifyToken, postController.createPost);
 router.post('/deletePost', verifyToken, postController.deletePost);
 
