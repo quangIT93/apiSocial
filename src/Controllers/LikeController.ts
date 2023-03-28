@@ -11,6 +11,16 @@ class LikeController {
     }
   }
 
+  async getUserLikeOfPostId(req: Request, res: Response) {
+    try {
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+      });
+    }
+  }
+
   async DeleteLikeForPostId(req: Request, res: Response) {
     try {
     } catch (error) {
