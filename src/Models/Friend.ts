@@ -6,10 +6,13 @@ interface IFriendship extends Document {
   status: 'pending' | 'accepted' | 'rejected';
 }
 
-const friendSchema = new Schema<IFriendship>({
-  userId: { type: Schema.Types.ObjectId, ref: 'users' },
-  friendId: { type: Schema.Types.ObjectId, ref: 'users' },
-  status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' },
-});
+const friendSchema = new Schema<IFriendship>(
+  {
+    userId: { type: Schema.Types.ObjectId, ref: 'users' },
+    friendId: { type: Schema.Types.ObjectId, ref: 'users' },
+    status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' },
+  },
+  { timestamps: true }
+);
 
 export default mongoose.model<IFriendship>('friends', friendSchema);

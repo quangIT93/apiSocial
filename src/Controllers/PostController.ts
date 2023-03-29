@@ -107,7 +107,7 @@ class PostController {
                 $match: {
                   $expr: {
                     $or: [
-                      { $eq: ['$_id', '$$userId'] }, // Lấy thông tin user đăng bài
+                      { $in: ['$_id', '$$userIds'] }, // Lấy thông tin user đăng bài
                       { $in: ['$_id', '$$friendIds'] }, // Lấy thông tin friends
                     ],
                   },
@@ -122,9 +122,19 @@ class PostController {
             $expr: {
               $or: [
                 { $eq: ['$userId', new ObjectId(req.userId)] }, // Lấy thông tin user đăng bài
-                { $in: ['$userId', '$friends.userId'] }, // Lấy thông tin friends
+                { $in: ['$userId', '$users._id'] }, // Lấy thông tin friends
               ],
             },
+          },
+        },
+        {
+          $unwind: '$users',
+        },
+        {
+          $match: {
+            $expr: {
+              $eq: ['$userId', '$users._id'],
+            }, // Lấy thông tin user đăng bài
           },
         },
 
@@ -136,12 +146,17 @@ class PostController {
             image: 1,
             likes: 1,
             comments: 1,
+            users: {
+              lastName: 1,
+              firstName: 1,
+              profilePicture: 1,
+            },
             createdAt: 1,
             updatedAt: 1,
           },
         },
       ]);
-
+      console.log(result.length);
       if (result)
         return res
           .status(200)
@@ -165,7 +180,7 @@ class PostController {
         likes,
         comments,
       });
-      console.log(posts);
+
       return res.status(200).json({ success: true, message: 'create post successfully', posts });
     } catch (error) {
       return res.status(500).json({

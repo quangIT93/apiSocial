@@ -1,7 +1,8 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-interface IComment {
-  userId: Schema.Types.ObjectId;
+export interface ICommentPost {
+  _id: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
   text: string;
   createdAt: Date;
   updatedAt: Date;
@@ -9,6 +10,8 @@ interface IComment {
 
 interface ILike {
   userId: Schema.Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface IPost {
@@ -18,7 +21,7 @@ interface IPost {
   createdAt: Date;
   updatedAt: Date;
   likes: ILike[];
-  comments: IComment[];
+  comments: ICommentPost[];
 }
 
 const PostSchema = new mongoose.Schema<IPost>({
@@ -37,8 +40,18 @@ const PostSchema = new mongoose.Schema<IPost>({
   },
   likes: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'users',
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users ',
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
+      updatedAt: {
+        type: Date,
+        default: Date.now,
+      },
     },
   ],
   comments: [

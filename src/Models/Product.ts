@@ -10,32 +10,35 @@ interface Product {
   date: Date;
 }
 
-const productSchema = new Schema<Product>({
-  storeId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Store',
-    required: true,
+const productSchema = new Schema<Product>(
+  {
+    storeId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Store',
+      required: true,
+    },
+    productName: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+    detail: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    date: {
+      type: Date,
+      required: true,
+    },
   },
-  productName: {
-    type: String,
-    required: true,
-  },
-  image: {
-    type: String,
-    required: true,
-  },
-  detail: {
-    type: String,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  date: {
-    type: Date,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
 export default model<Product>('products', productSchema);

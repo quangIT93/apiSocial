@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import User from '../Models/User';
+import User, { IUser } from '../Models/User';
 import Post from '../Models/Post';
 import Friend from '../Models/Friend';
 import Like from '../Models/Like';
@@ -12,89 +12,9 @@ class AuthController {
   async home(req: AuthRequest, res: Response) {
     try {
       const user = await User.findById(req.userId).select('-password');
-
-      // Lấy danh sách bạn bè của người dùng
-      const friends = await Friend.find({
-        $or: [{ userId: req.userId }, { friendId: req.userId }],
-        status: 'accepted',
-      }).populate('userId friendId', '-password');
-
-      // Lấy tất cả các bài post
-      const posts1 = await Post.find();
-
-      // Sử dụng truy vấn aggregate để lấy tất cả các bài đăng của người dùng và các bạn bè của họ
-      const posts2 = await Post.aggregate([
-        // Lookup để lấy thông tin user của từng bài post
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'userId',
-            foreignField: '_id',
-            as: 'user',
-          },
-        },
-        { $unwind: '$user' },
-
-        // Lookup để lấy danh sách bạn bè của người dùng
-        {
-          $lookup: {
-            from: 'friends',
-            let: { userId: '$userId' },
-            pipeline: [
-              {
-                $match: {
-                  $expr: {
-                    $and: [{ $eq: ['$userId', '$$userId'] }, { $eq: ['$status', 'accepted'] }],
-                  },
-                },
-              },
-              { $project: { userId: 1, friendId: 1 } },
-            ],
-            as: 'friends',
-          },
-        },
-        // Unwind friends để có được một mảng các friendId
-        // { $unwind: '$friends' },
-        // Group lại để thu thập tất cả các friendId thành một mảng
-        // {
-        //   $group: {
-        //     _id: '$_id',
-        //     userId: { $first: '$userId' },
-        //     friends: { $push: '$friends.friendId' },
-        //     createdAt: { $first: '$createdAt' },
-        //     text: { $first: '$text' },
-        //   },
-        // },
-        // Tìm tất cả các bài đăng của người dùng và bạn bè, sắp xếp theo thời gian mới nhất đến cũ nhất
-        // {
-        //   $match: {
-        //     $or: [
-        //       { userId: req.userId }, // Các bài đăng của người dùng
-        //       {
-        //         userId: {
-        //           $in: { $map: { input: '$friends._id', as: 'friendId', in: '$$friendId' } },
-        //         },
-        //       }, // Các bài đăng của các bạn bè
-        //     ],
-        //   },
-        // },
-        // { $sort: { createdAt: -1 } }, // Sắp xếp theo thời gian mới nhất đến cũ nhất
-      ]);
-
-      console.log(posts2.length);
-      // Lấy số lượt like
-      const likes = await Like.find();
-
       if (!user) return res.status(400).json({ success: false, message: 'User not found' });
-      return res.status(200).json({
-        success: true,
-        mesage: 'get homepage successfully',
-        // user,
-        // posts1,
-        // posts2,
-        friends,
-        // likes,
-      });
+
+      return res.status(201).json({ success: true, message: 'Authenization successfully' });
     } catch (error) {
       console.log(error);
       return res.status(500).json({
@@ -105,40 +25,58 @@ class AuthController {
   }
 
   async register(req: Request, res: Response) {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'thieu TEN DANG NHAP hoac/va MAT KHAU',
+      });
+    }
+
     try {
-      const { username, password } = req.body;
-
-      // Check if user with email already exists
+      // check for exiting user
+      // kiem tra xem co ton tai 1 username nao cung ten vs username cua ban khong
       const user = await User.findOne({ username });
+
       if (user) {
-        return res.status(400).json({ message: 'User already exists' });
+        return res.status(400).json({
+          success: false,
+          message: 'ten nguoi dung da ton tai',
+        });
       }
+      // tat ca deu ok thi hash mat khau
+      // hash cung bat dong bo nen dung async
+      // const hashedpassword = await argon2.hash(password)
 
-      // Create new user
-      const newUser = new User({
-        username,
-        password,
-      });
-
-      // Hash password
       const salt = await bcrypt.genSalt(10);
-      newUser.password = await bcrypt.hash(password, salt);
 
-      // Save user to database
-      const savedUser = await newUser.save();
+      const hashedpassword = await bcrypt.hash(password, salt);
 
-      if (!process.env.JWT_SECRET) {
-        throw new Error('JWT_SECRET is not defined');
-      }
-      // Generate JWT token
-      const token = jwt.sign({ userId: savedUser._id }, process.env.JWT_SECRET, {
-        expiresIn: '1h',
+      const newUser: IUser = new User({
+        username,
+        password: hashedpassword,
+        firstName: '',
+        lastName: '',
+        profilePicture: '',
+        coverPhoto: '',
+        bio: '',
+        email: '',
+        phone: '',
+        location: {
+          city: '',
+          country: '',
+          district: '',
+        },
+        dateOfBirth: null,
+        gender: '',
       });
+      // await newUser.save();
 
-      res.status(201).json({ token });
+      return res.status(201).json({ success: true, message: 'Register successfully', newUser });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Server error' });
+      return res.status(500).json({ message: 'Server error' });
     }
   }
 

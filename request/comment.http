@@ -1,3 +1,21 @@
 GET http://localhost:3000/api/post/getCommentPost
 Content-Type: application/json
 Authorization: Beared eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ZkZGJhMGYzNWFmNTQ1MDExYzE0NjUiLCJpYXQiOjE2Nzk4NjE5NzF9.WGnBm0wzAKLpIa2QT2j6tCfreb7N2sHVcK99rDl1UAU
+
+###
+DELETE http://localhost:3000/api/post/deleleCommentPost
+Content-Type: application/json
+Authorization: Beared eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ZkZGJhMGYzNWFmNTQ1MDExYzE0NjUiLCJpYXQiOjE2Nzk4NjE5NzF9.WGnBm0wzAKLpIa2QT2j6tCfreb7N2sHVcK99rDl1UAU
+
+{
+    "commentId": "640ba8ae8e2ef552648ad7c1"
+}
+###
+POST http://localhost:3000/api/post/createCommentPost
+Content-Type: application/json
+Authorization: Beared eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ZkZGJhMGYzNWFmNTQ1MDExYzE0NjUiLCJpYXQiOjE2Nzk4NjE5NzF9.WGnBm0wzAKLpIa2QT2j6tCfreb7N2sHVcK99rDl1UAU
+
+{
+    "postId": "63fe04e14c676f47aa224f05",
+    "text": "640ba8ae8e2ef552648ad7c1"
+}

@@ -5,19 +5,22 @@ interface ILike {
   postId: Schema.Types.ObjectId;
 }
 
-const LikeSchema: Schema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Types.ObjectId,
-    ref: 'users',
-    required: true,
+const LikeSchema: Schema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Types.ObjectId,
+      ref: 'users',
+      required: true,
+    },
+    postId: {
+      type: mongoose.Types.ObjectId,
+      ref: 'posts',
+      required: true,
+    },
   },
-  postId: {
-    type: mongoose.Types.ObjectId,
-    ref: 'posts',
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
-const LikeModel = mongoose.model<ILike & mongoose.Document>('likes', LikeSchema);
+const Like = mongoose.model<ILike & mongoose.Document>('likes', LikeSchema);
 
-export default LikeModel;
+export default Like;

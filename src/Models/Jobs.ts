@@ -8,12 +8,15 @@ export interface IJob extends Document {
   endDate: Date;
 }
 
-const JobSchema: Schema = new Schema({
-  userId: { type: Schema.Types.ObjectId, required: true },
-  company: { type: String, required: true },
-  position: { type: String, required: true },
-  startDate: { type: Date, required: true },
-  endDate: { type: Date, required: true },
-});
+const JobSchema: Schema = new Schema(
+  {
+    userId: { type: Schema.Types.ObjectId, required: true },
+    company: { type: String, required: true },
+    position: { type: String, required: true },
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
+  },
+  { timestamps: true }
+);
 
 export default mongoose.model<IJob>('jobs', JobSchema);
